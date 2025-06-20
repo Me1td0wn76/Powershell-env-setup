@@ -57,6 +57,23 @@ if (-not ($env:PATH -split ";" | Where-Object { $_ -eq $codePath })) {
     Write-Host "VS Codeのパスは既にPATHに含まれています。"
 }
 
+# VS Codeのショートカットをデスクトップに作成
+$desktop = [Environment]::GetFolderPath("Desktop")
+$vscodeExe = "$env:USERPROFILE\scoop\apps\vscode\current\Code.exe"
+$shortcutPath = Join-Path $desktop "Visual Studio Code.lnk"
+
+if (Test-Path $vscodeExe) {
+    $wsh = New-Object -ComObject WScript.Shell
+    $shortcut = $wsh.CreateShortcut($shortcutPath)
+    $shortcut.TargetPath = $vscodeExe
+    $shortcut.WorkingDirectory = Split-Path $vscodeExe
+    $shortcut.IconLocation = $vscodeExe
+    $shortcut.Save()
+    Write-Host "VS Codeのショートカットをデスクトップに作成しました。"
+} else {
+    Write-Host "VS Codeの実行ファイルが見つかりませんでした。ショートカットは作成されません。"
+}
+
 # Javaバケットを追加
 scoop bucket add java
 
