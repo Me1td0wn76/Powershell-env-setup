@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File .\PowerShell-env-setup.ps1
