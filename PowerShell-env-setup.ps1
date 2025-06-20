@@ -4,16 +4,51 @@
 # 各ツールのパスを環境変数に追加
 # ---------------------------------------------
 
-# 実行ポリシーをユーザー範囲で許可
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-
-# Scoopが未インストールならインストール
-if (-not (Test-Path "$env:USERPROFILE\scoop")) {
-    iwr -useb get.scoop.sh | iex
+# Scoopがインストールされているか確認し、未インストールならインストール
+if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Host "Scoopが見つかりません。インストールを開始します..."
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+    irm get.scoop.sh | iex
+} else {
+    Write-Host "Scoopは既にインストールされています。"
 }
 
-# Gitを先にインストール（Scoop操作に必要）
-scoop install git
+# extrasバケットが追加されているか確認し、未追加なら追加
+if (-not (scoop bucket list | Select-String -Pattern "^extras$")) {
+    Write-Host "Scoop extrasバケットを追加します..."
+    scoop bucket add extras
+} else {
+    Write-Host "Scoop extrasバケットは既に追加されています。"
+}
+
+# インストールしたいアプリ一覧
+$apps = @(
+    @{ name = "git"; bucket = "main" },
+    @{ name = "nodejs"; bucket = "main" },
+    @{ name = "vscode"; bucket = "extras" }
+)
+
+foreach ($app in $apps) {
+    if (-not (scoop list | Select-String -Pattern ("^" + $app.name + "\s"))) {
+        Write-Host "$($app.name) が見つかりません。インストールを開始します..."
+        scoop install $app.name
+    } else {
+        Write-Host "$($app.name) は既にインストールされています。"
+    }
+}
+
+# VS CodeのパスをユーザーPATHに追加（必要な場合のみ）
+$codePath = "$env:USERPROFILE\scoop\apps\vscode\current\bin"
+if (-not ($env:PATH -split ";" | Where-Object { $_ -eq $codePath })) {
+    Write-Host "VS CodeのパスをユーザーPATHに追加します..."
+    [Environment]::SetEnvironmentVariable(
+        "PATH",
+        "$env:PATH;$codePath",
+        [EnvironmentVariableTarget]::User
+    )
+} else {
+    Write-Host "VS Codeのパスは既にPATHに含まれています。"
+}
 
 # Javaバケットを追加
 scoop bucket add java
