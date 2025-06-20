@@ -29,10 +29,22 @@ if (-not (scoop bucket list | Select-String -Pattern "^extras$")) {
     Write-Host "Scoop extrasバケットは既に追加されています。"
 }
 
+# mainバケットが追加されているか確認し、未追加なら追加
+if (-not (scoop bucket list | Select-String -Pattern "^main$")) {
+    Write-Host "Scoop mainバケットを追加します..."
+    scoop bucket add main
+} else {
+    Write-Host "Scoop mainバケットは既に追加されています。"
+}
+
 # インストールしたいアプリ一覧（gitはすでに処理済みなので除外）
 $apps = @(
     @{ name = "nodejs"; bucket = "main" },
-    @{ name = "vscode"; bucket = "extras" }
+    @{ name = "vscode"; bucket = "extras" },
+    @{ name = "maven"; bucket = "main" },
+    @{ name = "gradle"; bucket = "main" },
+    @{ name = "jq"; bucket = "main" },
+    @{ name = "curl"; bucket = "main" }
 )
 
 foreach ($app in $apps) {
@@ -81,6 +93,10 @@ scoop bucket add java
 scoop install openjdk21
 scoop install vscode
 scoop install nodejs
+scoop install maven
+scoop install gradle
+scoop install jq
+scoop install curl
 
 # ========== 環境変数の設定 ==========
 
@@ -103,6 +119,22 @@ $pathsToAdd += "$gitPath\bin"
 $nodePath = (scoop prefix nodejs)
 $pathsToAdd += "$nodePath\bin"
 
+# Maven の bin パス追加
+$mavenPath = (scoop prefix maven)
+$pathsToAdd += "$mavenPath\bin"
+
+# Gradle の bin パス追加
+$gradlePath = (scoop prefix gradle)
+$pathsToAdd += "$gradlePath\bin"
+
+# jq の bin パス追加
+$jqPath = (scoop prefix jq)
+$pathsToAdd += "$jqPath"
+
+# curl の bin パス追加
+$curlPath = (scoop prefix curl)
+$pathsToAdd += "$curlPath"
+
 # 重複チェックしてPathに追記
 foreach ($p in $pathsToAdd) {
     if (-not ($oldPath -split ";" | Where-Object { $_ -eq $p })) {
@@ -115,11 +147,16 @@ foreach ($p in $pathsToAdd) {
 
 # ========== 完了メッセージ ==========
 
-Write-Host "`n✅ 開発環境のインストールが完了しました！"
+Write-Host "`環境のインストールが完了しました！"
 Write-Host " - OpenJDK 21（JAVA_HOME 設定済）"
 Write-Host " - Git（bin追加）"
 Write-Host " - Node.js（bin追加）"
 Write-Host " - VSCode"
+Write-Host " - VSCodeのデスクトップショートカット"
+Write-Host " - Maven（bin追加）"
+Write-Host " - Gradle（bin追加）"
+Write-Host " - jq（bin追加）"
+Write-Host " - curl（bin追加）"
 Write-Host "`環境変数 Path に以下のパスが追加されました："
 $pathsToAdd | ForEach-Object { Write-Host "   $_" }
 Write-Host "`PowerShell や VSCode を再起動して反映を確認してください。"
