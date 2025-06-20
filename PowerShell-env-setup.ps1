@@ -13,6 +13,14 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     Write-Host "Scoopは既にインストールされています。"
 }
 
+# gitがインストールされているか確認し、未インストールならインストール
+if (-not (scoop list | Select-String -Pattern "^git\s")) {
+    Write-Host "gitが見つかりません。インストールを開始します..."
+    scoop install git
+} else {
+    Write-Host "gitは既にインストールされています。"
+}
+
 # extrasバケットが追加されているか確認し、未追加なら追加
 if (-not (scoop bucket list | Select-String -Pattern "^extras$")) {
     Write-Host "Scoop extrasバケットを追加します..."
@@ -21,9 +29,8 @@ if (-not (scoop bucket list | Select-String -Pattern "^extras$")) {
     Write-Host "Scoop extrasバケットは既に追加されています。"
 }
 
-# インストールしたいアプリ一覧
+# インストールしたいアプリ一覧（gitはすでに処理済みなので除外）
 $apps = @(
-    @{ name = "git"; bucket = "main" },
     @{ name = "nodejs"; bucket = "main" },
     @{ name = "vscode"; bucket = "extras" }
 )
