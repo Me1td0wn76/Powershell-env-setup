@@ -8,8 +8,9 @@ Attention! We take no responsibility for anything that happens with this script!
 
 ## IN JAPANESE  
 これはパワーシェルのスクリプトです。  
-このスクリプトではscoopでのjava,git,vscode,Node.jsのセットアップとJAVA_HOMEの環境設定までを自動化させたものです。  
+このスクリプトではscoopでjava,git,vscode,Node.js,maven,gradleなどのセットアップとJAVA_HOMEの環境設定までを自動化させたものです。  
 
 ## 注意！　
-このスクリプトで何か起きても一切の責任はとれません！　　
+このスクリプトで何か起きても一切の責任はとれません！  
 よって使う場合は自己責任でお願いいたします。　　
+
