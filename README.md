@@ -6,10 +6,10 @@ this is Powershell script...
 ## Attention!!　　
 Attention! We take no responsibility for anything that happens with this script! Therefore, please use it at your own risk.　　
 
-# IN JAPANESE  
+## IN JAPANESE  
 これはパワーシェルのスクリプトです。  
 このスクリプトではscoopでのjava,git,vscode,Node.jsのセットアップとJAVA_HOMEの環境設定までを自動化させたものです。  
 
-注意！　
+## 注意！　
 このスクリプトで何か起きても一切の責任はとれません！　　
 よって使う場合は自己責任でお願いいたします。　　
