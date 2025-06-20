@@ -1,2 +1,4 @@
-# Powershell-env-setup
-Powershell script
+# Introduction to this script
+this is Powershell script...
+
+
