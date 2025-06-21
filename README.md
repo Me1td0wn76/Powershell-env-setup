@@ -1,7 +1,7 @@
 # Explanation of this script
 this is Powershell script...  
 
-- This script automates the setup of Java, Git, VSCode, and Node.js with Scoop, as well as the configuration of JAVA_HOME.  
+- This script automates the setup of Java, Git, VSCode, Node.js, Maven, Gradle, etc., with the configuration of JAVA_HOME.  
 
 ## Attention!!　　
 Attention! We take no responsibility for anything that happens with this script! Therefore, please use it at your own risk.　　
