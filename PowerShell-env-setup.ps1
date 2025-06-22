@@ -7,9 +7,8 @@
 
 Add-Type -AssemblyName System.Windows.Forms
 
-# インストール候補リスト
+# Gitは必ずインストールするのでリストから除外
 $apps = @(
-    @{ name = "git";        label = "Git";        bucket = "main"   },
     @{ name = "openjdk21";  label = "OpenJDK21";  bucket = "java"   },
     @{ name = "vscode";     label = "VSCode";     bucket = "extras" },
     @{ name = "nodejs";     label = "Node.js";    bucket = "main"   },
@@ -26,7 +25,7 @@ $apps = @(
 # フォーム作成
 $form = New-Object Windows.Forms.Form
 $form.Text = "インストールするツールを選択"
-$form.Size = New-Object Drawing.Size(600, 550)
+$form.Size = New-Object Drawing.Size(350, 425)
 $form.StartPosition = "CenterScreen"
 
 $checkboxes = @()
@@ -44,7 +43,7 @@ foreach ($app in $apps) {
 }
 
 $okButton = New-Object Windows.Forms.Button
-$okButton.Text = "インストール"
+$okButton.Text = "Install"
 $okButton.Width = 100
 $okButton.Top = $y + 10
 $okButton.Left = 50
@@ -52,7 +51,7 @@ $okButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
 $form.Controls.Add($okButton)
 
 $cancelButton = New-Object Windows.Forms.Button
-$cancelButton.Text = "キャンセル"
+$cancelButton.Text = "Cancel"
 $cancelButton.Width = 100
 $cancelButton.Top = $y + 10
 $cancelButton.Left = 160
@@ -86,6 +85,14 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     Write-Host "Scoopは既にインストールされています。"
 }
 
+# 必ずGitをインストール
+if (-not (scoop list | Select-String -Pattern "^git\s")) {
+    Write-Host "Git をインストールします..."
+    scoop install git
+} else {
+    Write-Host "Git は既にインストールされています。"
+}
+
 # 必要なバケットを追加
 $neededBuckets = $selectedApps.bucket | Select-Object -Unique
 foreach ($bucket in $neededBuckets) {
@@ -115,16 +122,16 @@ $oldPath = [Environment]::GetEnvironmentVariable("Path", "User")
 # 追記対象パスのリスト
 $pathsToAdd = @()
 
+# Gitのbinパスは必ず追加
+$gitPath = (scoop prefix git)
+$pathsToAdd += "$gitPath\bin"
+
 foreach ($app in $selectedApps) {
     switch ($app.name) {
         "openjdk21" {
             $javaPath = (scoop prefix openjdk21)
             [Environment]::SetEnvironmentVariable("JAVA_HOME", $javaPath, "User")
             $pathsToAdd += "$javaPath\bin"
-        }
-        "git" {
-            $gitPath = (scoop prefix git)
-            $pathsToAdd += "$gitPath\bin"
         }
         "nodejs" {
             $nodePath = (scoop prefix nodejs)
@@ -178,12 +185,12 @@ foreach ($p in $pathsToAdd) {
 # ========== 完了メッセージ ==========
 
 Write-Host "`n環境のインストールが完了しました！"
+Write-Host " - Git（bin追加）"
 foreach ($app in $selectedApps) {
     switch ($app.name) {
         "openjdk21" { Write-Host " - OpenJDK 21（JAVA_HOME 設定済）" }
-        "git"       { Write-Host " - Git（bin追加）" }
         "nodejs"    { Write-Host " - Node.js（bin追加）" }
-        "vscode"    { Write-Host " - VSCode"; Write-Host " - VSCodeのデスクトップショートカット" }
+        "vscode"    { Write-Host " - VSCode" }
         "maven"     { Write-Host " - Maven（bin追加）" }
         "gradle"    { Write-Host " - Gradle（bin追加）" }
         "jq"        { Write-Host " - jq（bin追加）" }
