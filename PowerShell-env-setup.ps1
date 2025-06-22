@@ -220,4 +220,25 @@ if ($selectedApps.name -contains "vscode") {
     } else {
         Write-Host "VSCodeのデスクトップショートカットは既に存在します。"
     }
+
+    # 拡張機能インストールの確認
+    $answer = Read-Host "VSCode拡張機能（日本語化・Java Extension Pack・GitHub）もインストールしますか？ (y/n)"
+    if ($answer -eq "y") {
+        $codeCmd = [System.IO.Path]::Combine($vscodePath, "bin", "code.cmd")
+        if (-not (Test-Path $codeCmd)) {
+            Write-Host "VSCodeのcodeコマンドが見つかりません。VSCodeを一度起動し、PATHを再読み込みしてください。"
+        } else {
+            & $codeCmd --install-extension ms-ceintl.vscode-language-pack-ja
+            & $codeCmd --install-extension vscjava.vscode-java-pack
+            & $codeCmd --install-extension github.vscode-pull-request-github
+            Write-Host "VSCode拡張機能（日本語化・Java Extension Pack・GitHub）をインストールしました。"
+            Write-Host "Displayから日本語化を選択し、VSCodeを再起動してください。"
+        }
+    } else {
+        Write-Host "VSCode拡張機能のインストールはスキップされました。"
+    }
 }
+
+Write-Host ""
+Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
+[void][System.Console]::ReadKey($true)
