@@ -26,7 +26,7 @@ $apps = @(
 # フォーム作成
 $form = New-Object Windows.Forms.Form
 $form.Text = "インストールするツールを選択"
-$form.Size = New-Object Drawing.Size(500, 400)
+$form.Size = New-Object Drawing.Size(600, 550)
 $form.StartPosition = "CenterScreen"
 
 $checkboxes = @()
