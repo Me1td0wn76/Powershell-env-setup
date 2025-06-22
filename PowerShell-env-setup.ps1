@@ -81,7 +81,7 @@ if ($selectedApps.Count -eq 0) {
 if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     Write-Host "Scoopが見つかりません。インストールを開始します..."
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-    irm get.scoop.sh | iex
+    Invoke-RestMethod get.scoop.sh | Invoke-Expression
 } else {
     Write-Host "Scoopは既にインストールされています。"
 }
