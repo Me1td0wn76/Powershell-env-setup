@@ -239,6 +239,10 @@ if ($selectedApps.name -contains "vscode") {
     }
 }
 
+# 設定ファイルのコピー
+$dir = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
+Copy-Item "$env:AppData\Code" "$dir\data\user-data" -Recurse -ErrorAction SilentlyContinue
+
 Write-Host ""
 Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
 [void][System.Console]::ReadKey($true)
