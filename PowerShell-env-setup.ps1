@@ -38,7 +38,7 @@ $form.StartPosition = "CenterScreen"
 # アプリ数に応じてフォームの高さを自動調整
 $baseHeight = 80    # ボタンや余白分の高さ
 $itemHeight = 30    # チェックボックス1つあたりの高さ
-$formWidth  = 360   # フォームの幅
+$formWidth  = 400   # フォームの幅
 
 $formHeight = $baseHeight + ($apps.Count * $itemHeight)
 $form.Size = New-Object Drawing.Size($formWidth, $formHeight)
