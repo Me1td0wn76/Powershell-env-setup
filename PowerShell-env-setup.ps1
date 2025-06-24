@@ -258,42 +258,6 @@ if ($selectedApps.name -contains "vscode") {
     }
 }
 
-# Everythingのデスクトップショートカットを作成（Everythingが選択されていた場合のみ）
-if ($selectedApps.name -contains "everything") {
-    $everythingPath = (scoop prefix everything)
-    $shortcutPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "Everything.lnk")
-
-    if (-not (Test-Path $shortcutPath)) {
-        $WshShell = New-Object -ComObject WScript.Shell
-        $Shortcut = $WshShell.CreateShortcut($shortcutPath)
-        $Shortcut.TargetPath = [System.IO.Path]::Combine($everythingPath, "Everything.exe")
-        $Shortcut.IconLocation = [System.IO.Path]::Combine($everythingPath, "Everything.exe")
-        $Shortcut.Save()
-        Write-Host "Everythingのデスクトップショートカットを作成しました。"
-    } else {
-        Write-Host "Everythingのデスクトップショートカットは既に存在します。"
-    }
-}
-# PowerShellの実行ポリシーを元に戻す
-Set-ExecutionPolicy Restricted -Scope CurrentUser -Force
-
-# Docker-desktopのショートカットをデスクトップに作成
-if ($selectedApps.name -contains "docker-desktop") {
-    $dockerDesktopPath = (scoop prefix docker-desktop)
-    $shortcutPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "Docker Desktop.lnk")
-
-    if (-not (Test-Path $shortcutPath)) {
-        $WshShell = New-Object -ComObject WScript.Shell
-        $Shortcut = $WshShell.CreateShortcut($shortcutPath)
-        $Shortcut.TargetPath = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
-        $Shortcut.IconLocation = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
-        $Shortcut.Save()
-        Write-Host "Docker Desktopのデスクトップショートカットを作成しました。"
-    } else {
-        Write-Host "Docker Desktopのデスクトップショートカットは既に存在します。"
-    }
-}
-
 Write-Host ""
 Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
 [void][System.Console]::ReadKey($true)
