@@ -257,6 +257,22 @@ if ($selectedApps.name -contains "vscode") {
         Write-Host "VSCode拡張機能のインストールはスキップされました。"
     }
 }
+# Docker Desktopのショートカットをデスクトップに作成
+if ($selectedApps.name -contains "docker-desktop") {
+    $dockerDesktopPath = (scoop prefix docker-desktop)
+    $dockerShortcutPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "Docker Desktop.lnk")
+
+    if (-not (Test-Path $dockerShortcutPath)) {
+        $WshShell = New-Object -ComObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut($dockerShortcutPath)
+        $Shortcut.TargetPath = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
+        $Shortcut.IconLocation = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
+        $Shortcut.Save()
+        Write-Host "Docker Desktopのデスクトップショートカットを作成しました。"
+    } else {
+        Write-Host "Docker Desktopのデスクトップショートカットは既に存在します。"
+    }
+}
 
 Write-Host ""
 Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
