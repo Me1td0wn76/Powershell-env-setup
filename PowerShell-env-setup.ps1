@@ -1,6 +1,7 @@
 ﻿# ---------------------------------------------
 # 開発環境セットアップスクリプト（管理者権限なし）
-# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl
+# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything
+#ほかにいいのあれば追加していくつもりです。
 # ---------------------------------------------
 # 各ツールのパスを環境変数に追加
 # ---------------------------------------------
@@ -16,17 +17,31 @@ $apps = @(
     @{ name = "gradle";     label = "Gradle";     bucket = "main"   },
     @{ name = "jq";         label = "jq";         bucket = "main"   },
     @{ name = "curl";       label = "curl";       bucket = "main"   },
-    @{ name = "docker";     label = "Docker";     bucket = "main"   },
+    @{ name = "docker";     label = "Docker (CLI)";     bucket = "main"   },
+    @{ name = "docker-desktop"; label = "Docker Desktop (GUI)"; bucket = "extras" },
     @{ name = "postman";    label = "Postman";    bucket = "extras" },
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
-    @{ name = "httpie";     label = "HTTPie";     bucket = "main"   }
+    @{ name = "httpie";     label = "HTTPie";     bucket = "main"   },
+    @{ name = "everything"; label = "Everything"; bucket = "extras" } 
+        
+        
+    # 他のツールを追加する場合はここに追加
+    # @{ name = "toolname"; label = "Tool Label"; bucket = "bucketname"  },
 )
 
 # フォーム作成
 $form = New-Object Windows.Forms.Form
 $form.Text = "インストールするツールを選択"
-$form.Size = New-Object Drawing.Size(350, 425)
+$form.Size = New-Object Drawing.Size(360, 440)
 $form.StartPosition = "CenterScreen"
+
+# アプリ数に応じてフォームの高さを自動調整
+$baseHeight = 80    # ボタンや余白分の高さ
+$itemHeight = 30    # チェックボックス1つあたりの高さ
+$formWidth  = 360   # フォームの幅
+
+$formHeight = $baseHeight + ($apps.Count * $itemHeight)
+$form.Size = New-Object Drawing.Size($formWidth, $formHeight)
 
 $checkboxes = @()
 $y = 20
@@ -169,6 +184,10 @@ foreach ($app in $selectedApps) {
             $httpiePath = (scoop prefix httpie)
             $pathsToAdd += "$httpiePath"
         }
+        "everything" {
+            $everythingPath = (scoop prefix everything)
+            $pathsToAdd += "$everythingPath"
+        }
     }
 }
 
@@ -239,6 +258,53 @@ if ($selectedApps.name -contains "vscode") {
     }
 }
 
+# Everythingのデスクトップショートカットを作成（Everythingが選択されていた場合のみ）
+if ($selectedApps.name -contains "everything") {
+    $everythingPath = (scoop prefix everything)
+    $shortcutPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "Everything.lnk")
+
+    if (-not (Test-Path $shortcutPath)) {
+        $WshShell = New-Object -ComObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut($shortcutPath)
+        $Shortcut.TargetPath = [System.IO.Path]::Combine($everythingPath, "Everything.exe")
+        $Shortcut.IconLocation = [System.IO.Path]::Combine($everythingPath, "Everything.exe")
+        $Shortcut.Save()
+        Write-Host "Everythingのデスクトップショートカットを作成しました。"
+    } else {
+        Write-Host "Everythingのデスクトップショートカットは既に存在します。"
+    }
+}
+# PowerShellの実行ポリシーを元に戻す
+Set-ExecutionPolicy Restricted -Scope CurrentUser -Force
+
+# Docker-desktopのショートカットをデスクトップに作成
+if ($selectedApps.name -contains "docker-desktop") {
+    $dockerDesktopPath = (scoop prefix docker-desktop)
+    $shortcutPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "Docker Desktop.lnk")
+
+    if (-not (Test-Path $shortcutPath)) {
+        $WshShell = New-Object -ComObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut($shortcutPath)
+        $Shortcut.TargetPath = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
+        $Shortcut.IconLocation = [System.IO.Path]::Combine($dockerDesktopPath, "Docker Desktop.exe")
+        $Shortcut.Save()
+        Write-Host "Docker Desktopのデスクトップショートカットを作成しました。"
+    } else {
+        Write-Host "Docker Desktopのデスクトップショートカットは既に存在します。"
+    }
+}
+
 Write-Host ""
 Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
 [void][System.Console]::ReadKey($true)
+
+# logファイルの作成
+$logFilePath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "PowerShell-env-setup.log")
+$logContent = @"
+セットアップが完了しました。
+追加された環境変数 Path:
+$($pathsToAdd -join "`n")
+"@
+Set-Content -Path $logFilePath -Value $logContent -Encoding UTF8
+Write-Host "セットアップログをデスクトップに保存しました: $logFilePath"
+# スクリプトの終了
