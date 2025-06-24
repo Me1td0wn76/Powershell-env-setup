@@ -274,17 +274,44 @@ if ($selectedApps.name -contains "docker-desktop") {
     }
 }
 
-Write-Host ""
-Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
-[void][System.Console]::ReadKey($true)
+
 
 # logファイルの作成
 $logFilePath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath("Desktop"), "PowerShell-env-setup.log")
-$logContent = @"
-セットアップが完了しました。
-追加された環境変数 Path:
-$($pathsToAdd -join "`n")
-"@
+$logContent = @()
+$logContent += "セットアップが完了しました。"
+$logContent += ""
+$logContent += "インストールされたツール:"
+$logContent += " - Git（bin追加）"
+foreach ($app in $selectedApps) {
+    switch ($app.name) {
+        "openjdk21" { $logContent += " - OpenJDK 21（JAVA_HOME 設定済）" }
+        "nodejs"    { $logContent += " - Node.js（bin追加）" }
+        "vscode"    { $logContent += " - VSCode" }
+        "maven"     { $logContent += " - Maven（bin追加）" }
+        "gradle"    { $logContent += " - Gradle（bin追加）" }
+        "jq"        { $logContent += " - jq（bin追加）" }
+        "curl"      { $logContent += " - curl（bin追加）" }
+        "docker"    { $logContent += " - Docker（bin追加）" }
+        "docker-desktop" { $logContent += " - Docker Desktop（bin追加・ショートカット）" }
+        "postman"   { $logContent += " - Postman（bin追加）" }
+        "wireshark" { $logContent += " - Wireshark（bin追加）" }
+        "httpie"    { $logContent += " - HTTPie（bin追加）" }
+        "everything" { $logContent += " - Everything（bin追加・ショートカット）" }
+    }
+}
+$logContent += ""
+$logContent += "追加された環境変数 Path:"
+foreach ($p in $pathsToAdd) {
+    $logContent += "   $p"
+}
+$logContent += ""
+$logContent += "PowerShell や VSCode を再起動して反映を確認してください。"
+
 Set-Content -Path $logFilePath -Value $logContent -Encoding UTF8
 Write-Host "セットアップログをデスクトップに保存しました: $logFilePath"
+
+Write-Host ""
+Write-Host "セットアップが完了しました。何かキーを押して終了してください。"
+[void][System.Console]::ReadKey($true)
 # スクリプトの終了
