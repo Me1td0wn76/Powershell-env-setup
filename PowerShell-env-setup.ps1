@@ -18,13 +18,13 @@ $apps = @(
     @{ name = "jq";         label = "jq";         bucket = "main"   },
     @{ name = "curl";       label = "curl";       bucket = "main"   },
     @{ name = "docker";     label = "Docker (CLI)";     bucket = "main"   },
-    @{ name = "docker-desktop"; label = "Docker Desktop (GUI)"; bucket = "extras" },
+    #@{ name = "docker-desktop"; label = "Docker Desktop (GUI)"; bucket = "extras" },  # Docker DesktopはWSL2やHyper-Vが必要なので、手動インストールを推奨
+    # Docker Desktopは管理者権限が必要なため、ここでは除外
     @{ name = "postman";    label = "Postman";    bucket = "extras" },
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
     @{ name = "httpie";     label = "HTTPie";     bucket = "main"   },
     @{ name = "everything"; label = "Everything"; bucket = "extras" } 
-        
-        
+
     # 他のツールを追加する場合はここに追加
     # @{ name = "toolname"; label = "Tool Label"; bucket = "bucketname"  },
 )
