@@ -24,7 +24,10 @@ $apps = @(
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
     #@{ name = "httpie";     label = "HTTPie";     bucket = "main"   }, # HTTPieはCLIツールなので、curlもしくはPostmanで代用可能
     @{ name = "everything"; label = "Everything"; bucket = "extras" },
-    @{ name = "python";     label = "Python";     bucket = "main" }
+    @{ name = "python";     label = "Python";     bucket = "main" },
+    @{ name = "gh";         label = "GitHub CLI"; bucket = "main" },
+    @{ name = "sudo";       label = "sudo";       bucket = "main" },
+    @{ name = "msys2";      label = "MSYS2";      bucket = "main" }
 )
 
 # フォーム作成
@@ -192,6 +195,18 @@ foreach ($app in $selectedApps) {
             $pathsToAdd += "$pythonPath"
             $pathsToAdd += "$pythonPath\Scripts"
         }
+        "gh" {
+            $ghPath = (scoop prefix gh)
+            $pathsToAdd += "$ghPath\bin"
+        }
+        "sudo" {
+            $sudoPath = (scoop prefix sudo)
+            $pathsToAdd += "$sudoPath"
+        }
+        "msys2" {
+            $msys2Path = (scoop prefix msys2)
+            $pathsToAdd += "$msys2Path\usr\bin"
+        }
     }
 }
 
@@ -222,6 +237,12 @@ foreach ($app in $selectedApps) {
         "postman"   { Write-Host " - Postman（bin追加）" }
         "wireshark" { Write-Host " - Wireshark（bin追加）" }
         "httpie"    { Write-Host " - HTTPie（bin追加）" }
+        "everything" { Write-Host " - Everything（bin追加・ショートカット）" }
+        "python"    { Write-Host " - Python（bin設定済）" }
+        "gh"        { Write-Host " - GitHub CLI（bin追加）"}
+        "sudo"      { Write-Host " - sudo（bin追加）" }
+        "msys2"     { Write-Host " - MSYS2（bin追加）" }
+
     }
 }
 Write-Host "`n環境変数 Path に以下のパスが追加されました："
