@@ -22,11 +22,9 @@ $apps = @(
     # Docker Desktopは管理者権限が必要なため、ここでは除外
     @{ name = "postman";    label = "Postman";    bucket = "extras" },
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
-    @{ name = "httpie";     label = "HTTPie";     bucket = "main"   },
-    @{ name = "everything"; label = "Everything"; bucket = "extras" } 
-
-    # 他のツールを追加する場合はここに追加
-    # @{ name = "toolname"; label = "Tool Label"; bucket = "bucketname"  },
+    #@{ name = "httpie";     label = "HTTPie";     bucket = "main"   }, # HTTPieはCLIツールなので、curlもしくはPostmanで代用可能
+    @{ name = "everything"; label = "Everything"; bucket = "extras" },
+    @{ name = "python";     label = "Python";     bucket = "main" }
 )
 
 # フォーム作成
@@ -187,6 +185,12 @@ foreach ($app in $selectedApps) {
         "everything" {
             $everythingPath = (scoop prefix everything)
             $pathsToAdd += "$everythingPath"
+        }
+        "python" {
+            $pythonPath = (scoop prefix python)
+            [Environment]::SetEnvironmentVariable("PYTHON_HOME", $pythonPath, "User")
+            $pathsToAdd += "$pythonPath"
+            $pathsToAdd += "$pythonPath\Scripts"
         }
     }
 }
