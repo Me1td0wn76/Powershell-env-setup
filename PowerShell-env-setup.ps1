@@ -1,6 +1,6 @@
 ﻿# ---------------------------------------------
 # 開発環境セットアップスクリプト（管理者権限なし）
-# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything
+# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything + Python + GitHub CLI + sudo + MSYS2 + 
 #ほかにいいのあれば追加していくつもりです。
 # ---------------------------------------------
 # 各ツールのパスを環境変数に追加
@@ -27,7 +27,8 @@ $apps = @(
     @{ name = "python";     label = "Python";     bucket = "main" },
     @{ name = "gh";         label = "GitHub CLI"; bucket = "main" },
     @{ name = "sudo";       label = "sudo";       bucket = "main" },
-    @{ name = "msys2";      label = "MSYS2";      bucket = "main" }
+    @{ name = "msys2";      label = "MSYS2";      bucket = "main" },
+    @{ name = "qemu";       label = "QEMU";       bucket = "main" }
 )
 
 # フォーム作成
@@ -207,6 +208,10 @@ foreach ($app in $selectedApps) {
             $msys2Path = (scoop prefix msys2)
             $pathsToAdd += "$msys2Path\usr\bin"
         }
+        "qemu" {
+            $qemuPath = (scoop prefix qemu)
+            $pathsToAdd += "$qemuPath"
+        }
     }
 }
 
@@ -242,6 +247,7 @@ foreach ($app in $selectedApps) {
         "gh"        { Write-Host " - GitHub CLI（bin追加）"}
         "sudo"      { Write-Host " - sudo（bin追加）" }
         "msys2"     { Write-Host " - MSYS2（bin追加）" }
+        "qemu"      { Write-Host " - QEMU（bin追加）" }
 
     }
 }
@@ -323,6 +329,11 @@ foreach ($app in $selectedApps) {
         "wireshark" { $logContent += " - Wireshark（bin追加）" }
         "httpie"    { $logContent += " - HTTPie（bin追加）" }
         "everything" { $logContent += " - Everything（bin追加・ショートカット）" }
+        "python"    { $logContent += " - Python（bin設定済）" }
+        "gh"        { $logContent += " - GitHub CLI（bin追加）" }
+        "sudo"      { $logContent += " - sudo（bin追加）" }
+        "msys2"     { $logContent += " - MSYS2（bin追加）" }
+        "qemu"      { $logContent += " - QEMU（bin追加）" }
     }
 }
 $logContent += ""
