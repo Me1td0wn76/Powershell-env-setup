@@ -1,6 +1,6 @@
 ﻿# ---------------------------------------------
 # 開発環境セットアップスクリプト（管理者権限なし）
-# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything + Python + GitHub CLI + sudo + MSYS2 + 
+# Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything + Python + GitHub CLI + sudo + MSYS2 + qemu
 #ほかにいいのあれば追加していくつもりです。
 # ---------------------------------------------
 # 各ツールのパスを環境変数に追加
