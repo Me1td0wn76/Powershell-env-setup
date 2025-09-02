@@ -1,7 +1,7 @@
 ﻿# ---------------------------------------------
 # 開発環境セットアップスクリプト（管理者権限なし）
 # Scoop + Git + Java + VSCode + Node.js + Maven + Gradle + jq + curl + Docker + Postman + Wireshark + HTTPie + Everything
-#ほかにいいのあれば追加していくつもりです。
+# ほかにいいのあれば追加していくつもりです。
 # ---------------------------------------------
 # 各ツールのパスを環境変数に追加
 # ---------------------------------------------
@@ -22,8 +22,8 @@ $apps = @(
     @{ name = "postman";    label = "Postman";    bucket = "extras" },
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
     @{ name = "httpie";     label = "HTTPie";     bucket = "main"   },
-    @{ name = "everything"; label = "Everything"; bucket = "extras" } 
-        
+    @{ name = "everything"; label = "Everything"; bucket = "extras" },
+    @{ name = "postgresql";  label = "PostgreSQL";  bucket = "main" } 
         
     # 他のツールを追加する場合はここに追加
     # @{ name = "toolname"; label = "Tool Label"; bucket = "bucketname"  },
@@ -188,6 +188,10 @@ foreach ($app in $selectedApps) {
             $everythingPath = (scoop prefix everything)
             $pathsToAdd += "$everythingPath"
         }
+        "postgresql" {
+            $postgresqlPath = (scoop prefix postgresql)
+            $pathsToAdd += "$postgresqlPath\bin"
+        }
     }
 }
 
@@ -218,6 +222,7 @@ foreach ($app in $selectedApps) {
         "postman"   { Write-Host " - Postman（bin追加）" }
         "wireshark" { Write-Host " - Wireshark（bin追加）" }
         "httpie"    { Write-Host " - HTTPie（bin追加）" }
+        "postgresql" { Write-Host " - PostgreSQL（bin追加）" }
     }
 }
 Write-Host "`n環境変数 Path に以下のパスが追加されました："
@@ -298,6 +303,7 @@ foreach ($app in $selectedApps) {
         "wireshark" { $logContent += " - Wireshark（bin追加）" }
         "httpie"    { $logContent += " - HTTPie（bin追加）" }
         "everything" { $logContent += " - Everything（bin追加・ショートカット）" }
+        "postgresql" { $logContent += " - PostgreSQL（bin追加）" }
     }
 }
 $logContent += ""
