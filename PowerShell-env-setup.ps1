@@ -13,6 +13,7 @@ $apps = @(
     @{ name = "openjdk21";  label = "OpenJDK21";  bucket = "java"   },
     @{ name = "vscode";     label = "VSCode";     bucket = "extras" },
     @{ name = "nodejs";     label = "Node.js";    bucket = "main"   },
+    @{ name = "dotnet-sdk"; label = ".NET SDK";   bucket = "main"   },
     @{ name = "maven";      label = "Maven";      bucket = "main"   },
     @{ name = "gradle";     label = "Gradle";     bucket = "main"   },
     @{ name = "jq";         label = "jq";         bucket = "main"   },
@@ -153,6 +154,10 @@ foreach ($app in $selectedApps) {
             $nodePath = (scoop prefix nodejs)
             $pathsToAdd += "$nodePath\bin"
         }
+        "dotnet-sdk" {
+            $dotnetPath = (scoop prefix dotnet-sdk)
+            $pathsToAdd += "$dotnetPath"
+        }
         "maven" {
             $mavenPath = (scoop prefix maven)
             $pathsToAdd += "$mavenPath\bin"
@@ -214,6 +219,7 @@ foreach ($app in $selectedApps) {
     switch ($app.name) {
         "openjdk21" { Write-Host " - OpenJDK 21（JAVA_HOME 設定済）" }
         "nodejs"    { Write-Host " - Node.js（bin追加）" }
+        "dotnet-sdk" { Write-Host " - .NET SDK（bin追加）" }
         "vscode"    { Write-Host " - VSCode" }
         "maven"     { Write-Host " - Maven（bin追加）" }
         "gradle"    { Write-Host " - Gradle（bin追加）" }
@@ -293,6 +299,7 @@ foreach ($app in $selectedApps) {
     switch ($app.name) {
         "openjdk21" { $logContent += " - OpenJDK 21（JAVA_HOME 設定済）" }
         "nodejs"    { $logContent += " - Node.js（bin追加）" }
+        "dotnet-sdk" { $logContent += " - .NET SDK（bin追加）" }
         "vscode"    { $logContent += " - VSCode" }
         "maven"     { $logContent += " - Maven（bin追加）" }
         "gradle"    { $logContent += " - Gradle（bin追加）" }
