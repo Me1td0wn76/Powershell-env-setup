@@ -25,7 +25,9 @@ $apps = @(
     @{ name = "wireshark";  label = "Wireshark";  bucket = "extras" },
     @{ name = "httpie";     label = "HTTPie";     bucket = "main"   },
     @{ name = "everything"; label = "Everything"; bucket = "extras" },
-    @{ name = "postgresql";  label = "PostgreSQL";  bucket = "main" } 
+    @{ name = "postgresql";  label = "PostgreSQL";  bucket = "main" },
+    @{ name = "qemu";       label = "QEMU";       bucket = "main"   },
+    @{ name = "msys2";      label = "MSYS2";      bucket = "main"   }
         
     # 他のツールを追加する場合はここに追加
     # @{ name = "toolname"; label = "Tool Label"; bucket = "bucketname"  },
@@ -198,6 +200,16 @@ foreach ($app in $selectedApps) {
             $postgresqlPath = (scoop prefix postgresql)
             $pathsToAdd += "$postgresqlPath\bin"
         }
+        "qemu" {
+            $qemuPath = (scoop prefix qemu)
+            $pathsToAdd += "$qemuPath"
+        }
+        "msys2" {
+            $msys2Path = (scoop prefix msys2)
+            $pathsToAdd += "$msys2Path\usr\bin"
+            $pathsToAdd += "$msys2Path\mingw64\bin"
+            [Environment]::SetEnvironmentVariable("MSYS2_PATH_TYPE", "inherit", "User")
+        }
     }
 }
 
@@ -230,6 +242,8 @@ foreach ($app in $selectedApps) {
         "wireshark" { Write-Host " - Wireshark（bin追加）" }
         "httpie"    { Write-Host " - HTTPie（bin追加）" }
         "postgresql" { Write-Host " - PostgreSQL（bin追加）" }
+        "qemu"      { Write-Host " - QEMU（bin追加）" }
+        "msys2"     { Write-Host " - MSYS2（usr/bin, mingw64/bin追加）" }
     }
 }
 Write-Host "`n環境変数 Path に以下のパスが追加されました："
@@ -312,6 +326,8 @@ foreach ($app in $selectedApps) {
         "httpie"    { $logContent += " - HTTPie（bin追加）" }
         "everything" { $logContent += " - Everything（bin追加・ショートカット）" }
         "postgresql" { $logContent += " - PostgreSQL（bin追加）" }
+        "qemu"      { $logContent += " - QEMU（bin追加）" }
+        "msys2"     { $logContent += " - MSYS2（usr/bin, mingw64/bin追加）" }
     }
 }
 $logContent += ""
